@@ -24,6 +24,12 @@
         </developer>
     </developers>
 
+    <scm>
+        <connection>scm:git:https://github.com/kahramani/transaction-stats.git</connection>
+        <developerConnection>scm:git:https://github.com/kahramani/transaction-stats.git</developerConnection>
+        <url>https://github.com/kahramani/transaction-stats.git</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
