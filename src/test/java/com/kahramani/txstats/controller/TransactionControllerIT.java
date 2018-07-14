@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -38,7 +40,7 @@ public class TransactionControllerIT {
     public void should_return_http_201() {
         TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAmount(new Double("12.3"));
-        transactionRequest.setTimestamp(System.currentTimeMillis());
+        transactionRequest.setTimestamp(Instant.now().toEpochMilli());
 
         // call the endpoint
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:" + serverPort + ENDPOINT);
