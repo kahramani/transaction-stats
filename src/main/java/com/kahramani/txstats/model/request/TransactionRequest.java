@@ -23,6 +23,10 @@ public class TransactionRequest {
 
     @Override
     public String toString() {
-        return "TransactionRequest{" + "amount=" + amount + ", timestamp=" + timestamp + '}';
+        return String.format(
+                "%s{amount=%f, timestamp=%d}",
+                this.getClass().getSimpleName(),
+                getAmount(),
+                getTimestamp());
     }
 }

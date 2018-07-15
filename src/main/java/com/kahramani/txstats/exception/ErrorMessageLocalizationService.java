@@ -28,8 +28,10 @@ public class ErrorMessageLocalizationService {
         try {
             return messageSource.getMessage(key, args, locale);
         } catch (NoSuchMessageException e) {
-            logger.warn("{} not found in messages file", key, e);
-            return messageSource.getMessage("system.error", args, locale);
+            logger.error("{} not found in messages file", key, e);
+            // log level is error, because every publicly reachable api error messages must be clear
+            // a missing message must be fixed immediately.
+            return messageSource.getMessage("message.key.not.found", args, locale);
         }
     }
 

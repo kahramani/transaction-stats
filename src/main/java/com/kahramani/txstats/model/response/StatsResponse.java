@@ -50,6 +50,13 @@ public class StatsResponse {
 
     @Override
     public String toString() {
-        return "StatsResponse{" + "sum=" + sum + ", avg=" + avg + ", max=" + max + ", min=" + min + ", count=" + count + '}';
+        return String.format(
+                "%s{count=%f, sum=%f, min=%f, avg=%f, max=%f}",
+                this.getClass().getSimpleName(),
+                getCount(),
+                getSum(),
+                getMin(),
+                getAvg(),
+                getMax());
     }
 }

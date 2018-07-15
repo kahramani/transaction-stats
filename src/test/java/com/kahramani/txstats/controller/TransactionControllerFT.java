@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Functional tests for /transactions endpoint.
  * Checks if everything works right in spring application context and relations between business layers
+ * Edge cases covered on unit tests of each services
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

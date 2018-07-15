@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.Locale;
 
@@ -54,6 +56,38 @@ public class RestControllerExceptionHandlerTest {
         // assertions
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getBody()).isNull();
+    }
+
+    @Test
+    public void should_return_http_400_without_a_body_when_httpRequestMethodNotSupportedException_occurs() {
+        HttpRequestMethodNotSupportedException exception = new HttpRequestMethodNotSupportedException("not supported http verb");
+        Mockito.when(errorMessageLocalizationService.getLocaleMessage("validation.request.http.verb.not.supported")).thenReturn("999;not supported");
+
+        ResponseEntity<ErrorResponse> response = restControllerExceptionHandler.handleHttpRequestMethodNotSupportedException(exception);
+
+        // assertions
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        ErrorResponse errorResponse = response.getBody();
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.getLocale()).isEqualTo("en");
+        assertThat(errorResponse.getErrorCode()).isEqualTo("999");
+        assertThat(errorResponse.getErrorMessage()).isEqualTo("not supported");
+    }
+
+    @Test
+    public void should_return_http_400_without_a_body_when_httpMessageNotReadableException_occurs() {
+        HttpMessageNotReadableException exception = new HttpMessageNotReadableException("not-readable");
+        Mockito.when(errorMessageLocalizationService.getLocaleMessage("validation.request.http.message.not.readable")).thenReturn("999;not readable");
+
+        ResponseEntity<ErrorResponse> response = restControllerExceptionHandler.handleHttpMessageNotReadableException(exception);
+
+        // assertions
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        ErrorResponse errorResponse = response.getBody();
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse.getLocale()).isEqualTo("en");
+        assertThat(errorResponse.getErrorCode()).isEqualTo("999");
+        assertThat(errorResponse.getErrorMessage()).isEqualTo("not readable");
     }
 
     @Test
