@@ -34,7 +34,7 @@ public class TransactionStoreTest {
 
         executorService.awaitTermination(3, TimeUnit.SECONDS);
 
-        DoubleSummaryStatistics stats = transactionStore.findStatsBefore(Instant.now().toEpochMilli());
+        DoubleSummaryStatistics stats = transactionStore.findStats();
 
         // assertions
         assertThat(stats).isNotNull();

@@ -10,6 +10,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Global exception handler to manage all rest exceptions on one hand.
+ */
 @RestControllerAdvice
 public class RestControllerExceptionHandler {
 

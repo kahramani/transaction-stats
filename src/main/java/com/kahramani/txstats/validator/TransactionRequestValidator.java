@@ -1,7 +1,7 @@
 package com.kahramani.txstats.validator;
 
-import com.kahramani.txstats.exception.UnacceptableRequestTimestampValidationException;
 import com.kahramani.txstats.exception.RequestValidationException;
+import com.kahramani.txstats.exception.UnacceptableRequestTimestampValidationException;
 import com.kahramani.txstats.model.request.TransactionRequest;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,9 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * Accept only valid requests for your business, others will be responded with a clear message
+ */
 @Service
 public class TransactionRequestValidator {
 

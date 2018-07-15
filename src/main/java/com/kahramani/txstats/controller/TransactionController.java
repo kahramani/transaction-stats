@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Transactions endpoint to accept transaction requests
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class TransactionController {

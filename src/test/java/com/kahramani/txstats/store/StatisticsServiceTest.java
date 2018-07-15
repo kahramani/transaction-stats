@@ -12,7 +12,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.DoubleSummaryStatistics;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StatisticsServiceTest {
@@ -28,7 +27,7 @@ public class StatisticsServiceTest {
     @Test
     public void should_retrieve_stats_response() {
         final DoubleSummaryStatistics mock = new DoubleSummaryStatistics();
-        Mockito.when(transactionStore.findStatsBefore(anyLong())).thenReturn(mock);
+        Mockito.when(transactionStore.findStats()).thenReturn(mock);
 
         StatsResponse statsResponse = statisticsService.retrieveStatsResponse();
 

@@ -4,13 +4,20 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * Spring bean used as data-store. This store holds data in whole lifecycle of the application.
+ */
 public class TransactionStore {
+
+    private static final long STATS_REFRESH_SCOPE_IN_SECONDS = TimeUnit.MINUTES.toSeconds(1);
 
     private static TransactionStore INSTANCE;
     private LocalDateTime mapCreationDateTime;
@@ -29,24 +36,34 @@ public class TransactionStore {
                 });
     }
 
+    /**
+     * Specifies the bucket to put given amount. Method handles writing process in thread-safe mode.
+     */
     void save(Long timestamp, Double amount) {
         long bucket = ChronoUnit.SECONDS.between(mapCreationDateTime, LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
         putVal(bucket, amount);
     }
 
-    DoubleSummaryStatistics findStatsBefore(long beforeTimestamp) {
-        long duration = ChronoUnit.SECONDS.between(mapCreationDateTime, LocalDateTime.ofInstant(Instant.ofEpochMilli(beforeTimestamp), ZoneId.systemDefault()));
+    /**
+     * All stats combined here.
+     * Stats size can be 60 at most and everyone represents statistics of each second.
+     */
+    DoubleSummaryStatistics findStats() {
         DoubleSummaryStatistics result = new DoubleSummaryStatistics();
-        if (duration < 60) {
-            concurrentNavigableMap.values().forEach(result::combine);
-        } else {
-            concurrentNavigableMap.tailMap(duration - 60).values().forEach(result::combine);
-        }
+        retrieveSnapshotOfValidRange().forEach(result::combine);
         return result;
     }
 
-    void flushStore() {
-        INSTANCE = null;
+    /**
+     * Method will return 60 object at most. This leads us to achieve O(1) complexity.
+     * Each object holds stats for specific range
+     */
+    private Collection<DoubleSummaryStatistics> retrieveSnapshotOfValidRange() {
+        long duration = ChronoUnit.SECONDS.between(mapCreationDateTime, LocalDateTime.now());
+        if (duration < STATS_REFRESH_SCOPE_IN_SECONDS) {
+            return concurrentNavigableMap.values();
+        }
+        return concurrentNavigableMap.tailMap(duration - STATS_REFRESH_SCOPE_IN_SECONDS).values();
     }
 
     private synchronized void putVal(long key, Double value) {

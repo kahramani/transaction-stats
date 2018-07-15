@@ -4,7 +4,6 @@ import com.kahramani.txstats.mapper.DoubleSummaryStatisticsToStatsResponseMapper
 import com.kahramani.txstats.model.response.StatsResponse;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.DoubleSummaryStatistics;
 
 @Service
@@ -19,11 +18,7 @@ public class StatisticsService {
     }
 
     public StatsResponse retrieveStatsResponse() {
-        DoubleSummaryStatistics stats = transactionStore.findStatsBefore(Instant.now().toEpochMilli());
+        DoubleSummaryStatistics stats = transactionStore.findStats();
         return responseMapper.apply(stats);
-    }
-
-    public void refreshStats() {
-        transactionStore.flushStore();
     }
 }

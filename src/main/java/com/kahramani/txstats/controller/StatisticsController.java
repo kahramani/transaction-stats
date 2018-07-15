@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Statistics endpoint to respond summary requests
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class StatisticsController {
@@ -35,14 +38,5 @@ public class StatisticsController {
                 ChronoUnit.MILLIS.between(startTime, ZonedDateTime.now()),
                 statsResponse);
         return statsResponse;
-    }
-
-    @GetMapping(value = "/refresh")
-    @ResponseStatus(HttpStatus.OK)
-    public void refresh() {
-        ZonedDateTime startTime = ZonedDateTime.now();
-        logger.info("Refresh transaction stats started");
-        statisticsService.refreshStats();
-        logger.info("Refresh transaction stats ended. Duration: {} in millis.", ChronoUnit.MILLIS.between(startTime, ZonedDateTime.now()));
     }
 }
