@@ -62,44 +62,16 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>integration-tests</id>
-                        <phase>integration-test</phase>
+                        <id>functional-tests</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>test</goal>
                         </goals>
                         <configuration>
                             <includes>
                                 <include>**/*Test.*</include>
-                                <include>**/*IT.*</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/*FT.*</exclude>
-                            </excludes>
-                            <reuseForks>${surefire.reuseForks}</reuseForks>
-                            <forkCount>${surefire.forkCount}</forkCount>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>functional-tests</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
                                 <include>**/*FT.*</include>
                             </includes>
-                            <excludes>
-                                <exclude>**/*Test.*</exclude>
-                                <exclude>**/*IT.*</exclude>
-                            </excludes>
                             <reuseForks>${surefire.reuseForks}</reuseForks>
                             <forkCount>${surefire.forkCount}</forkCount>
                         </configuration>
