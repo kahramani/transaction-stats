@@ -1,6 +1,7 @@
 package com.kahramani.txstats.controller;
 
 import com.kahramani.txstats.model.request.TransactionRequest;
+import com.kahramani.txstats.store.TransactionService;
 import com.kahramani.txstats.validator.TransactionRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,12 @@ public class TransactionController {
     private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     private final TransactionRequestValidator transactionRequestValidator;
+    private final TransactionService transactionService;
 
-    public TransactionController(TransactionRequestValidator transactionRequestValidator) {
+    public TransactionController(TransactionRequestValidator transactionRequestValidator,
+                                 TransactionService transactionService) {
         this.transactionRequestValidator = transactionRequestValidator;
+        this.transactionService = transactionService;
     }
 
     @PostMapping(value = "/transactions")
@@ -28,7 +32,7 @@ public class TransactionController {
         ZonedDateTime startTime = ZonedDateTime.now();
         logger.info("Create transaction started with request: {}", transactionRequest); // request contains no sensitive data so logging shouldn't be a problem
         transactionRequestValidator.validate(transactionRequest);
-        // TODO do your business
+        transactionService.add(transactionRequest.getTimestamp(), transactionRequest.getAmount());
         logger.info("Create transaction ended. Duration: {} in millis.", ChronoUnit.MILLIS.between(startTime, ZonedDateTime.now()));
     }
 }

@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TransactionControllerIT {
 
     private final static String ENDPOINT = "/api/v1/transactions";
+    private final static String REFRESH_ENDPOINT = "/api/v1/refresh";
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -39,7 +40,7 @@ public class TransactionControllerIT {
     @Test
     public void should_return_http_201() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAmount(new Double("12.3"));
+        transactionRequest.setAmount(0.0d);
         transactionRequest.setTimestamp(Instant.now().toEpochMilli());
 
         // call the endpoint
@@ -48,5 +49,9 @@ public class TransactionControllerIT {
 
         // assertions
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        // this method dirties context so refresh needed
+        UriComponentsBuilder refreshUri = UriComponentsBuilder.fromHttpUrl("http://localhost:" + serverPort + REFRESH_ENDPOINT);
+        testRestTemplate.exchange(refreshUri.build().encode().toUri(), HttpMethod.GET, null, Void.class);
     }
 }

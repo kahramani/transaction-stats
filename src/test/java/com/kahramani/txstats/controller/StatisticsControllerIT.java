@@ -42,6 +42,6 @@ public class StatisticsControllerIT {
         // assertions
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         StatsResponse statsResponse = response.getBody();
-        assertThat(statsResponse).isNull();
+        assertThat(statsResponse).isNotNull();
     }
 }
